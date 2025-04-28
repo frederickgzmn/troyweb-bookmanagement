@@ -30,4 +30,5 @@ Route::resource('roles', RoleController::class);
 Route::middleware(['auth:api'])->group(function () {
     Route::resource('books', BooksController::class);
     Route::get('/books/{id}/show', [BooksController::class, 'show'])->name('books.show');
+    Route::get('/logout', [BooksController::class, 'logout']);
 });

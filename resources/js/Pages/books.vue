@@ -105,6 +105,14 @@
         }
     };
 
+    const logout = async () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.clear();
+
+        router.visit('/login');
+    };
+
     const delete_book = async ( book_id ) => {
         isLoading.value = true;
         errorMessages.value = null;
@@ -213,7 +221,7 @@
                 <td class="border border-gray-300 px-4 py-2 space-x-2">
                     <Link :href="'/books/' + book.id + '/show'" class="text-blue-500 hover:underline">View</Link>
                     <Link v-if="auth.user.permissions.original.includes(2)" :href="'/books/' + book.id + '/edit'" class="text-green-500 hover:underline">Edit</Link>
-                    <button @click="delete_book(book.id)" class="text-red-500 hover:underline">Delete</button>
+                    <button @click="delete_book(book.id)" v-if="auth.user.permissions.original.includes(3)" class="text-red-500 hover:underline">Delete</button>
                 </td>
                 </tr>
             </tbody>
@@ -264,7 +272,9 @@
         <div class="mt-4">
             <!-- add a new book is the ID 1 -->
             <Link :href="'/books/create'" v-if="auth.user.permissions.original.includes(1)" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-full shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Add a new book</Link>
+            <Link :href="'/logout'" @click="logout()" class="px-4 py-2 ml-8 bg-red-500 text-white font-semibold rounded-full shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Log out</Link>
         </div>
+
 
     </div>
 </template>

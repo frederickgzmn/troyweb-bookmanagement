@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             PermissionSeeder::class,
             PublisherSeeder::class,
+            RolePermissionSeeder::class,
+            BooksSeeder::class,
         ]);
     }
 }

@@ -199,6 +199,9 @@ class AuthController extends Controller
 
             // return the permissions.
             return response()->json( $user_permissions, Response::HTTP_OK );
+        } else {
+            // return an empty array.
+            return response()->json( [], Response::HTTP_OK );
         }
 
         return true;

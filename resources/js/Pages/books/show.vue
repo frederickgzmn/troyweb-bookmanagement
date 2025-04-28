@@ -82,7 +82,7 @@
             <img class="w-full max-w-xs rounded-lg" :src="book_cover_image" alt="Book Cover" />
             </div>
         </div>
-        <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8" v-if="auth.user.permissions.original.includes(5)">
             <h2 class="text-2xl font-semibold mb-4 text-black">Customer Reviews</h2>
             <ul v-if="customer_reviews.length > 0" class="space-y-4">
                 <li v-for="review in customer_reviews" :key="review.id" class="border-b pb-4">

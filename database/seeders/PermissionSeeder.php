@@ -18,6 +18,7 @@ class PermissionSeeder extends Seeder
             ['name' => 'Edit an existing book', 'created_at' => now()],
             ['name' => 'Remove a book', 'created_at' => now()],
             ['name' => 'Mark a book as returned', 'created_at' => now()],
+            ['name' => 'Submit review', 'created_at' => now()],
         ]);
     }
 }
