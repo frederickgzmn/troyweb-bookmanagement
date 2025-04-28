@@ -34,7 +34,8 @@ class BooksController extends Controller
             'author.name as author_name',
             'category.name as category_name',
             'users.name as user_name',
-            DB::raw('(SELECT AVG(rating_stars) FROM customer_reviews WHERE customer_reviews.book_id = books.id) as average_rating')
+            DB::raw('DATEDIFF(books.borrow_due_date, NOW()) as due_days'),
+            DB::raw('(SELECT AVG(rating_stars) FROM customer_reviews WHERE customer_reviews.book_id = books.id) as average_rating'),
         )->inRandomOrder()->limit(5)->get();
 
         // Return the books to the view
@@ -218,7 +219,7 @@ class BooksController extends Controller
     }
 
     /**
-     * Checkout book
+     * Mark a book as borrowed by the user
      */
     public function mark_checkout( Request $request ) {
         // Validate the request
@@ -232,8 +233,12 @@ class BooksController extends Controller
             $book = Books::findOrFail($request->input('book_id') );
 
             // Update the book
-            $book->update([
+            $query = $book->newQuery()->where('id', $book->id);
+            $query->update([
                 'status' => 'borrowed',
+                'user_id' => Auth::user()->id,
+                'borrow_start_date' => now(),
+                'borrow_due_date' => now()->addDays(5),
             ]);
 
             // If the book is updated, return a success message
@@ -241,6 +246,45 @@ class BooksController extends Controller
                 return response()->json(
                     [
                         'success' => 'Book marked successfully',
+                    ]
+                );
+            }
+        } else {
+            // If the book is not updated, return an error message
+            return response()->json(
+                $validator
+            );
+        }
+    }
+
+    /**
+     * Checkout book
+     */
+    public function mark_as_returned( Request $request ) {
+        // Validate the request
+        $validator = $request->validate([
+            'book_id' => 'required|integer',
+        ]);
+
+        // check if the validator is valid
+        if ( $validator ) {
+            // Get the book by ID
+            $book = Books::findOrFail($request->input('book_id') );
+
+            // Update the book
+            $query = $book->newQuery()->where('id', $book->id);
+            $query->update([
+                'status' => 'available',
+                'user_id' => 0,
+                'borrow_start_date' => null,
+                'borrow_due_date' => null,
+            ]);
+
+            // If the book is updated, return a success message
+            if ( $book ) {
+                return response()->json(
+                    [
+                        'success' => 'Book marked as returned successfully',
                     ]
                 );
             }

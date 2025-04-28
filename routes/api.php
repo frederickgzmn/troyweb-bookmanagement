@@ -34,6 +34,8 @@ Route::prefix('v1')->group(function () {
             Route::post('review_create', [CustomerReviewsController::class, 'review_create']);
             //Mark checkout
             Route::post('book_checkout', [BooksController::class, 'mark_checkout']);
+            // Mark return
+            Route::post('book_return', [BooksController::class, 'mark_as_returned']);
             // Delete book
             Route::post('book_delete', [BooksController::class, 'destroy']);
         });

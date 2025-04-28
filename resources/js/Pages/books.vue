@@ -142,6 +142,27 @@
         }
     };
 
+    const book_return = async ( book_id ) => {
+        try {
+            // Sending the ajax request to the api server
+            const response = await axios.post('/api/v1/auth/book_return', {
+                book_id: book_id,
+            });
+
+            // capture the errors.
+            if ( response.data.error ) {
+                errorMessages.value = response.data.error;
+            }
+
+            if ( response.data.success ) {
+                router.reload();
+            }
+
+        } catch (error) {
+            console.error( 'Server error, try again later:', error );
+        }
+    };
+
     const make_checkout_book = async ( book_id ) => {
         try {
             // Sending the ajax request to the api server
@@ -152,6 +173,10 @@
             // capture the errors.
             if ( response.data.error ) {
                 errorMessages.value = response.data.error;
+            }
+
+            if ( response.data.success ) {
+                router.reload();
             }
 
         } catch (error) {
@@ -229,7 +254,7 @@
         </div>
 
         <div v-if="book_list.length > 0" class="mt-6">
-            <h2 class="text-xl font-semibold mb-4 troy_web_color">Books Available</h2>
+            <h2 class="text-xl font-semibold mb-4 troy_web_color">Books Available and Borrowed with Due date</h2>
             <table class="min-w-full border-collapse border border-gray-300">
             <thead class="bg-gray-100">
                 <tr>
@@ -246,6 +271,7 @@
                 <th class="border border-gray-300 px-4 py-2 text-left troy_web_color">Category</th>
                 <th class="border border-gray-300 px-4 py-2 text-left troy_web_color">Cover Image</th>
                 <th class="border border-gray-300 px-4 py-2 text-left troy_web_color">Average Rating</th>
+                <th class="border border-gray-300 px-4 py-2 text-left troy_web_color">Due days</th>
                 <th class="border border-gray-300 px-4 py-2 text-left troy_web_color">Action</th>
                 </tr>
             </thead>
@@ -260,9 +286,11 @@
                     <img :src="'/storage/' + book.cover_image" v-if="book.cover_image" alt="Cover Image" class="w-12 h-12 object-cover" />
                 </td>
                 <td class="border border-gray-300 px-4 py-2">{{ book.average_rating }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ book.due_days }}</td>
                 <td class="border border-gray-300 px-4 py-2">
-                    <button @click="make_checkout_book(book.id)" v-if="auth.user.permissions.original.includes(4)" class="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Mark Checked Out</button>
-                    <p v-if="!auth.user.permissions.original.includes(4)" class="text-gray-500">Unavailable</p>
+                    <button @click="make_checkout_book(book.id)" v-if="book.status != 'borrowed'" class="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Mark Checked Out</button>
+                    <button @click="book_return(book.id)" v-if="auth.user.permissions.original.includes(2)" class="px-2 py-1 ml-8 bg-blue-500 text-white rounded hover:bg-blue-600">Mark As Returned</button>
+                    <p v-if="book.status == 'borrowed'" class="text-red-500">Unavailable(Check the due days)</p>
                 </td>
                 </tr>
             </tbody>
