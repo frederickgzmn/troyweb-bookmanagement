@@ -17,6 +17,33 @@ This is a Laravel-based application for managing books. It provides features for
 - Vue 3 Composition API
 - InertiaJS
 
+# Features:
+
+User Management:
+Users can sign up (as Librarian or Customer), log in, and log out.
+
+Featured Books:
+Display random books with Title, Author, Description, Cover Image, and Average Rating.
+Filter and sort by Title, Author, and Availability.
+
+Book Details:
+View full book information including Publisher, Publication Date, Category, ISBN, Page Count, and Customer Reviews.
+
+Book Search:
+Search books by partial title matches.
+
+Book Management (Librarian only):
+Add, edit, or delete books.
+
+Book Checkout:
+Customers can check out one copy of a book for 5 days.
+Only librarians can mark books as returned.
+
+Customer Reviews:
+Customers can leave a short review and a 1–5 star rating.
+
+And more.
+
 ## Installation
 
 1. Clone the repository:
@@ -76,10 +103,6 @@ DB diagram file: /db diagram.txt
 
 - Access the application at `http://localhost:8000`.
 - Use the provided API endpoints for programmatic access.
-
-## Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request.
 
 ## License
 
