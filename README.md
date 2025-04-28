@@ -66,6 +66,12 @@ This is a Laravel-based application for managing books. It provides features for
 
 9. Enjoy!!..
 
+## Database Structure
+Tool use: https://dbdiagram.io/
+DB diagram file: /db diagram.txt
+
+![Database Structure](https://github.com/frederickgzmn/troyweb-bookmanagement/blob/03031b13bd9d0b2b4d47806201566a2463bfefb0/db%20structure.png)
+
 ## Usage
 
 - Access the application at `http://localhost:8000`.
