@@ -9,6 +9,14 @@
     const errorMessages = ref(null);
     const isLoading = ref(false);
 
+    axios.interceptors.request.use((config) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    });
+
     // Login method.
     const login_method = async () => {
         isLoading.value = true;
@@ -21,17 +29,14 @@
                 password: password.value,
             });
 
-            // Mapping the result variables
-            const { status_login, access_token, token_type, error } = response.data;
-
             // Check if the login was successful.
-            if ( status_login == 'success' ) {
+            if ( response.data.token ) {
                 // Storing the access token and token type.
-                localStorage.setItem( 'access_token', access_token );
-                localStorage.setItem( 'token_type', token_type );
+                localStorage.setItem( 'user', JSON.stringify( response.data.user ) );
+                localStorage.setItem( 'token', response.data.token );
 
                 // redirect to dashboard.
-                router.visit('/');
+                router.visit('/books');
             } else {
                 errorMessages.value = error;
             }

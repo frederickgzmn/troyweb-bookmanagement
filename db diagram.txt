@@ -2,73 +2,79 @@
 // Docs: https://dbml.dbdiagram.io/docs
 
 Table users {
-    id integer [primary key]
-    username varchar
-    role_id varchar
-    created_at timestamp
+  id integer [primary key]
+  name varchar2
+  email varchar2
+  email_verified_at timestamp
+  password varchar2
+  rememberToken varchar2
+  role_id integer
+  created_at timestamp
 }
 
 Table role {
-    id integer
-    name varchar
-    created_at timestamp
+  id integer
+  name varchar2
+  created_at timestamp
 }
 
 Table permission {
-    id integer
-    name varchar
-    created_at timestamp
+  id integer
+  name varchar2
+  created_at timestamp
 }
 
 Table author {
-    id integer
-    name varchar
-    created_at timestamp
+  id integer
+  name varchar2
+  created_at timestamp
 }
 
 Table publisher {
-    id integer
-    name varchar
-    created_at timestamp
+  id integer
+  name varchar2
+  created_at timestamp
 }
 
 Table category {
-    id integer
-    name varchar
-    created_at timestamp
+  id integer
+  name varchar2
+  created_at timestamp
 }
 
 Table role_permission {
-    id integer [primary key]
-    role_id integer
-    permission_id integer
-    created_at timestamp
+  id integer [primary key]
+  role_id integer
+  permission_id integer
+  created_at timestamp
 }
 
 Table books {
-    id integer [primary key]
-    title varchar
-    author_id integer
-    description text
-    cover_image varchar
-    publisher_id integer
-    publication_date date
-    category_id integer
-    isbn integer
-    page_count integer
-    user_id integer [not null]
-    status varchar
-    created_at timestamp
+  id integer [primary key]
+  title varchar2
+  author_id integer
+  description text
+  cover_image varchar2
+  publisher_id integer
+  publication_date date
+  category_id integer
+  isbn integer
+  page_count integer
+  user_id integer [not null]
+  status varchar2
+  borrow_start_date date
+  borrow_due_date date
+  created_at timestamp
 }
 
 Table customer_reviews {
-    id integer [primary key]
-    title varchar
-    comment text
-    rating_stars integer // [range(1,5)]
-    user_id integer [not null]
-    book_id integer [not null]
-    created_at timestamp
+  id integer [primary key]
+  title varchar2
+  comment text
+  rating_stars integer // [range(1,5)]
+  user_id integer [not null]
+  book_id integer [not null]
+  created_at timestamp
 }
 
 Ref: role_permission.role_id > role.id

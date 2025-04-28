@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BooksController;
+use App\Http\Controllers\CustomerReviewsController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -24,6 +26,16 @@ Route::prefix('v1')->group(function () {
             Route::get('logout', [AuthController::class, 'logout']);
             Route::post('refresh_token', [AuthController::class, 'refresh_token']);
             Route::get('get_user', [AuthController::class, 'get_user']);
+            Route::post('book_search', [BooksController::class, 'search']);
+            // Same function for update and create.
+            Route::post('book_create', [BooksController::class, 'create_request']);
+            Route::post('book_edit', [BooksController::class, 'create_request']);
+            // Add reviews
+            Route::post('review_create', [CustomerReviewsController::class, 'review_create']);
+            //Mark checkout
+            Route::post('book_checkout', [BooksController::class, 'mark_checkout']);
+            // Delete book
+            Route::post('book_delete', [BooksController::class, 'destroy']);
         });
     });
 });

@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\BooksController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,20 +19,15 @@ use Illuminate\Support\Facades\DB;
 Route::get('/', function () {
     return Inertia::render('welcome');
 });
+
 Route::get('/login', function () {
     return Inertia::render('login');
 });
 
-Route::get('/registration', function () {
-    return Inertia::render('registration');
-});
+Route::get('/registration', [RoleController::class, 'index']);
+Route::resource('roles', RoleController::class);
 
-// Just for testing
-// Route::get('/test-db', function () {
-//     try {
-//         DB::connection()->getPdo();
-//         return 'Database working!';
-//     } catch (\Exception $e) {   
-//         return 'Database failed: ' . $e->getMessage();
-//     }
-// });
+Route::middleware(['auth:api'])->group(function () {
+    Route::resource('books', BooksController::class);
+    Route::get('/books/{id}/show', [BooksController::class, 'show'])->name('books.show');
+});
