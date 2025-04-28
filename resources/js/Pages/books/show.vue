@@ -50,69 +50,73 @@
                 rating_stars: review_rating.value,
             });
 
-            if (response.data.success) {
+            if (response.data.message) {
                 // Reset the review form fields
                 review_title.value = '';
                 review_comment.value = '';
                 review_rating.value = '';
 
-                // Optionally, you can show a success message or update the reviews list
+                router.reload();
             }
         } catch (error) {
             console.error('Error submitting review:', error);
         }
     };
 </script>
-
 <template>
-    <div>
-        <h1>Book Details</h1>
-        <div>
-            <h2>{{ book_title }}</h2>
-            <p><strong>Author:</strong> {{ book_author }}</p>
-            <p><strong>Description:</strong> {{ book_description }}</p>
-            <p><strong>Publication Date:</strong> {{ book_publication_date }}</p>
-            <p><strong>Category:</strong> {{ book_category }}</p>
-            <p><strong>ISBN:</strong> {{ book_isbn }}</p>
-            <p><strong>Page Count:</strong> {{ book_page_count }}</p>
-            <img :src="book_cover_image" alt="Book Cover"/>
+    <div class="container mx-auto p-4">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-black">Book Details</h1>
         </div>
-    </div>
-    <div>
-        <h2>Customer Reviews</h2>
-        <ul v-if="customer_reviews.length > 0">
-            <li v-for="review in customer_reviews" :key="review.id">
-                <p><strong>{{ review.title }}</strong> by {{ review.user_name }}</p>
-                <p>{{ review.comment }}</p>
-                <p><strong>Rating:</strong> {{ review.rating_stars }}</p>
-            </li>
-        </ul>
-        <p v-else>No reviews available.</p>
-    </div>
-    <div>
-        <h2>Write a Review</h2>
-        <form @submit.prevent="submit_review">
-            <div>
-                <label for="review_title">Title:</label>
-                <input type="text" id="review_title" v-model="review_title" required />
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8 flex flex-wrap items-start">
+            <div class="w-full md:w-1/2 pr-4">
+            <h2 class="text-2xl font-semibold mb-4 text-black">{{ book_title }}</h2>
+            <p class="mb-2 text-gray-700"><strong>Author:</strong> {{ book_author }}</p>
+            <p class="mb-2 text-gray-700"><strong>Description:</strong> {{ book_description }}</p>
+            <p class="mb-2 text-gray-700"><strong>Publication Date:</strong> {{ book_publication_date }}</p>
+            <p class="mb-2 text-gray-700"><strong>Category:</strong> {{ book_category }}</p>
+            <p class="mb-2 text-gray-700"><strong>ISBN:</strong> {{ book_isbn }}</p>
+            <p class="mb-2 text-gray-700"><strong>Page Count:</strong> {{ book_page_count }}</p>
             </div>
-            <div>
-                <label for="review_comment">Comment:</label>
-                <textarea id="review_comment" v-model="review_comment" required></textarea>
+            <div class="w-full md:w-1/2 flex justify-center">
+            <img class="w-full max-w-xs rounded-lg" :src="book_cover_image" alt="Book Cover" />
             </div>
-            <div>
-                <label for="review_rating">Rating:</label>
-                <select id="review_rating" v-model="review_rating" required>
-                    <option value="" disabled>Select a rating</option>
-                    <option v-for="rating in 5" :key="rating" :value="rating">{{ rating }}</option>
-                </select>
-            </div>
-            <button type="submit">Submit Review</button>
-        </form>
-    </div>
-    <div>
-        <Link href="/books">Back to Book List</Link>
-        <!-- Edit a book is the ID 2 -->
-        <Link v-if="auth.user.permissions.original.includes(2)" :href="'/books/' + book.id + '/edit'">Edit</Link>
+        </div>
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4 text-black">Customer Reviews</h2>
+            <ul v-if="customer_reviews.length > 0" class="space-y-4">
+                <li v-for="review in customer_reviews" :key="review.id" class="border-b pb-4">
+                    <p class="font-semibold text-black">{{ review.title }} by {{ review.user_name }}</p>
+                    <p class="text-gray-600">{{ review.comment }}</p>
+                    <p class="text-gray-700"><strong>Rating:</strong> {{ review.rating_stars }}</p>
+                </li>
+            </ul>
+            <p v-else class="text-gray-500">No reviews available.</p>
+        </div>
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4 text-black">Write a Review</h2>
+            <form @submit.prevent="submit_review" class="space-y-4">
+                <div>
+                    <label for="review_title" class="block font-medium mb-1 text-gray-700">Title:</label>
+                    <input type="text" id="review_title" v-model="review_title" required class="w-full border rounded-lg px-3 py-2 text-gray-700" />
+                </div>
+                <div>
+                    <label for="review_comment" class="block font-medium mb-1 text-gray-700">Comment:</label>
+                    <textarea id="review_comment" v-model="review_comment" required class="w-full border rounded-lg px-3 py-2 text-gray-700"></textarea>
+                </div>
+                <div>
+                    <label for="review_rating" class="block font-medium mb-1 text-gray-700">Rating:</label>
+                    <select id="review_rating" v-model="review_rating" required class="w-full border rounded-lg px-3 py-2 text-gray-700">
+                        <option value="" disabled>Select a rating</option>
+                        <option v-for="rating in 5" :key="rating" :value="rating">{{ rating }}</option>
+                    </select>
+                </div>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Submit Review</button>
+            </form>
+        </div>
+        <div class="text-center">
+            <Link v-if="auth.user.permissions.original.includes(2)" :href="'/books/' + book.id + '/edit'" class="mr-4 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Edit</Link>
+            <Link href="/books" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Back to Book List</Link>
+        </div>
     </div>
 </template>

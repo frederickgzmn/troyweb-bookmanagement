@@ -1,6 +1,6 @@
 <script setup>
     import { ref } from 'vue';
-    import { router } from '@inertiajs/vue3';
+    import { Link, router } from '@inertiajs/vue3';
     import axios from 'axios';
 
     const title = ref('');
@@ -91,76 +91,81 @@
 </script>
 
 <template>
-    <div>
-        <h1>Edit a New Book</h1> <strong>{{ book.id }}</strong>
-        <form @submit.prevent="edit_book" v-if="permission">
-            <div>
-                <label for="title">Title:</label>
-                <input type="text" id="title" v-model="title" required />
+    <div class="flex justify-center items-center min-h-screen text-black">
+        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
+            <h1 class="text-2xl font-bold mb-4 text-center troy_web_color">Edit a New Book <strong>{{ book.id }}</strong></h1>
+            <form @submit.prevent="edit_book" v-if="permission" class="space-y-4">
+                <div class="flex flex-col">
+                    <label for="title" class="text-sm font-medium mb-1 troy_web_color">Title:</label>
+                    <input type="text" id="title" v-model="title" required class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="author" class="text-sm font-medium mb-1 troy_web_color">Author:</label>
+                    <select id="author" v-model="author" required class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="" disabled>Select an author</option>
+                        <option v-for="author in miscellaneous.author" :key="author.id" :value="author.id">{{ author.name }}</option>
+                    </select>
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="description" class="text-sm font-medium troy_web_color mb-1">Description:</label>
+                    <textarea id="description" v-model="description" required class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="cover_image" class="text-sm font-medium mb-1 troy_web_color">Cover Image:</label>
+                    <input type="file" id="cover_image" @change="onFileChange" class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="publisher" class="text-sm font-medium mb-1 troy_web_color">Publisher:</label>
+                    <select id="publisher" v-model="publisher" required class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="" disabled>Select a publisher</option>
+                        <option v-for="publisher in miscellaneous.publisher" :key="publisher.id" :value="publisher.id">{{ publisher.name }}</option>
+                    </select>
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="publication_date" class="text-sm font-medium mb-1 troy_web_color">Publication Date:</label>
+                    <input type="date" id="publication_date" v-model="publication_date" required class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="category" class="text-sm font-medium mb-1 troy_web_color">Category:</label>
+                    <select id="category" v-model="category" required class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="" disabled>Select a category</option>
+                        <option v-for="category in miscellaneous.category" :key="category.id" :value="category.id">{{ category.name }}</option>
+                    </select>
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="isbn" class="text-sm font-medium mb-1 troy_web_color">ISBN:</label>
+                    <input type="text" id="isbn" v-model="isbn" required class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="page_count" class="text-sm font-medium mb-1 troy_web_color">Page Count:</label>
+                    <input type="number" id="page_count" v-model="page_count" required class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+
+                <div class="m-auto">
+                    <button type="submit" class="w-30 mr-1 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Edit Book</button>
+                    <Link :href="'/books'" class="px-4 py-2 bg-red-700 text-white font-semibold ml-4 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Cancel</Link>
+                </div>
+            </form>
+
+            <!-- Display validation errors -->
+            <div v-if="errorMessages.length" class="error-messages mt-4">
+                <ul>
+                    <li v-for="(error, index) in errorMessages" :key="index">{{ error }}</li>
+                </ul>
             </div>
 
-            <div>
-                <label for="author">Author:</label>
-                <select id="author" v-model="author" required>
-                    <option value="" disabled>Select an author</option>
-                    <option v-for="author in miscellaneous.author" :key="author.id" :value="author.id">{{ author.name }}</option>
-                </select>
+            <!-- Display success message -->
+            <div v-if="notificationSuccess" class="success-message mt-4">
+                <p class="text-green-600">{{ notificationSuccess }}</p>
             </div>
-
-            <div>
-                <label for="description">Description:</label>
-                <textarea id="description" v-model="description" required></textarea>
-            </div>
-
-            <div>
-                <label for="cover_image">Cover Image:</label>
-                <input type="file" id="cover_image" @change="onFileChange" />
-            </div>
-
-            <div>
-                <label for="publisher">Publisher:</label>
-                <select id="publisher" v-model="publisher" required>
-                    <option value="" disabled>Select an publisher</option>
-                    <option v-for="publisher in miscellaneous.publisher" :key="publisher.id" :value="publisher.id">{{ publisher.name }}</option>
-                </select>
-            </div>
-
-            <div>
-                <label for="publication_date">Publication Date:</label>
-                <input type="date" id="publication_date" v-model="publication_date" required />
-            </div>
-
-            <div>
-                <label for="category">category:</label>
-                <select id="category" v-model="category" required>
-                    <option value="" disabled>Select an category</option>
-                    <option v-for="category in miscellaneous.category" :key="category.id" :value="category.id">{{ category.name }}</option>
-                </select>
-            </div>
-
-            <div>
-                <label for="isbn">ISBN:</label>
-                <input type="text" id="isbn" v-model="isbn" required />
-            </div>
-
-            <div>
-                <label for="page_count">Page Count:</label>
-                <input type="number" id="page_count" v-model="page_count" required />
-            </div>
-
-            <button type="submit">Edit Book</button>
-        </form>
-
-        <!-- Display validation errors -->
-        <div v-if="errorMessages.length" class="error-messages">
-            <ul>
-                <li v-for="(error, index) in errorMessages" :key="index">{{ error }}</li>
-            </ul>
-        </div>
-
-        <!-- Display success message -->
-        <div v-if="notificationSuccess" class="success-message">
-            <p>{{ notificationSuccess }}</p>
         </div>
     </div>
 </template>

@@ -6,7 +6,7 @@
     <title>Troy Web Book Management</title>
     @vite(['resources/js/app.js', 'resources/css/app.css'])
 </head>
-<body class="antialiased">
+<body class="antialiased bg-gray-500 text-white">
     @inertia
 </body>
 </html>

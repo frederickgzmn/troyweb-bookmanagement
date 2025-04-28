@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@source "../views";
+
+.troy_web_color {
+    color: #e77436;
+}
+
+.troy_web_alt_color {
+    color: #73472b;
+}
+
+.troy_web_bg_color {
+    background-color: #474750;
+    width: 85%;
+    align-items: center;
+    align-content: center;
+    margin: 60px auto;
+    padding: 80px;
+}

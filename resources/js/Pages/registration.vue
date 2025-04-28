@@ -73,48 +73,61 @@
 </script>
 
 <template>  
-    <div>
-        <h1>Registration</h1>
-        <form @submit.prevent="register_method">
+    <div class="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md mt-10">
+        <h1 class="text-2xl font-bold mb-4 troy_web_color">Registration</h1>
+        <form @submit.prevent="register_method" class="space-y-4">
             <div>
-                <label for="name">Name:</label>
-                <input type="text" id="name" v-model="name" required />
+                <label for="name" class="block text-sm font-medium text-black">Name:</label>
+                <input type="text" id="name" v-model="name" required 
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black" />
             </div>
             <div>
-                <label for="email">Email:</label>
-                <input type="email" id="email" v-model="email" required />
+                <label for="email" class="block text-sm font-medium text-black">Email:</label>
+                <input type="email" id="email" v-model="email" required 
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black" />
             </div>
             <div>
-                <label for="password">Password:</label>
-                <input type="password" id="password" v-model="password" required />
+                <label for="password" class="block text-sm font-medium text-black">Password:</label>
+                <input type="password" id="password" v-model="password" required 
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black" />
             </div>
             <div>
-                <label for="password_confirmation">Confirm Password:</label>
-                <input type="password" id="password_confirmation" v-model="password_confirmation" required />
+                <label for="password_confirmation" class="block text-sm font-medium text-black">Confirm Password:</label>
+                <input type="password" id="password_confirmation" v-model="password_confirmation" required 
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black" />
             </div>
             <div>
-                <label for="role">Role:</label>
-                <select id="role" v-model="role" required>
-                    <option value="" selected="true" >Select a role</option>
+                <label for="role" class="block text-sm font-medium text-black">Role:</label>
+                <select id="role" v-model="role" required 
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-black">
+                    <option value="" selected="true">Select a role</option>
                     <option v-for="role in roles" :key="role.id" :value="role.id">{{ role.name }}</option>
                 </select>
             </div>
-            <button type="submit" :disabled="isLoading">
+            <button type="submit" :disabled="isLoading" 
+                class="w-full py-2 px-4 rounded-md shadow-md bg-gray-500 font-bold troy_web_color disabled:opacity-50">
                 Register
             </button>
         </form>
 
         <!-- Display error messages -->
-        <div v-if="errorMessages" class="error-messages">
+        <div v-if="errorMessages" class="mt-4 p-4 bg-red-100 text-red-700 rounded-md">
             <p v-for="(message, index) in errorMessages" :key="index">{{ message }}</p>
         </div>
 
         <!-- Display success message -->
-        <div v-if="notificationSuccess" class="success-message">
+        <div v-if="notificationSuccess" class="mt-4 p-4 bg-green-100 text-green-700 rounded-md">
             <p>{{ notificationSuccess }}</p>
         </div>
 
         <!-- Link to login page -->
-        <Link href="/login">Already have an account? Login here</Link>
+        <div class="mt-4 text-center">
+            <Link href="/login" class="troy_web_color hover:underline">Already have an account? Login here</Link>
+        </div>
+
+        <div class="mt-4 text-center">
+            <Link href="/" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Cancel</Link>
+        </div>
+
     </div>
 </template>

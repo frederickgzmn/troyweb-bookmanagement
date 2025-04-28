@@ -38,7 +38,7 @@
                 // redirect to dashboard.
                 router.visit('/books');
             } else {
-                errorMessages.value = error;
+                errorMessages.value = response.data.error;
             }
             
         } catch (error) {
@@ -53,23 +53,41 @@
 </script>
 
 <template>
-    <div>
-        <h1>Login</h1>
-        <form @submit.prevent="login_method">
-            <div>
-                <label for="email">Email:</label>
-                <input type="email" id="email" v-model="email" required />
+    <div class="flex items-center justify-center min-h-screen bg-gray-900 ">
+        <div class="w-full max-w-md p-8 bg-white rounded shadow-md troy_web_bg_color">
+            <h1 class="mb-6 text-2xl font-bold text-center troy_web_color">Login</h1>
+            <form @submit.prevent="login_method" class="space-y-4 ">
+                <div>
+                    <label for="email" class="block mb-2 text-sm font-medium troy_web_color">Email:</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        v-model="email" 
+                        required 
+                        class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
+                <div>
+                    <label for="password" class="block mb-2 text-sm font-medium troy_web_color">Password:</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        v-model="password" 
+                        required 
+                        class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+                <button 
+                    type="submit" 
+                    :disabled="isLoading" 
+                    class="w-full px-4 py-2 text-white bg-orange-500 rounded hover:bg-blue-600 disabled:opacity-50"
+                >
+                    Login
+                </button>
+                <p v-if="errorMessages" class="mt-2 text-sm text-red-500">{{ errorMessages }}</p>
+            </form>
+            <div class="mt-4 text-center">
+                <Link href="/" class="troy_web_color hover:underline ">Go to Welcome Page</Link>
             </div>
-            <div>
-                <label for="password">Password:</label>
-                <input type="password" id="password" v-model="password" required />
-            </div>
-            <button type="submit" :disabled="isLoading">
-                Login
-            </button>
-            <p v-if="errorMessages">{{ errorMessages }}</p>
-        </form>
-
-        <Link href="/">Go to Welcome Page</Link>
+        </div>
     </div>
 </template>

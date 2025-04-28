@@ -152,122 +152,119 @@
     };
 </script>
 
-<template>  
+<template>
     <div>
-        <h1>Search Books</h1>
-        <form @submit.prevent="search_books">
-            <div>
-                <label for="search_title">Search Title:</label>
-                <input type="text" id="search_title" v-model="search_title" required />
+        <h1 class="text-2xl font-bold mb-4 flex flex-col items-center mt-8">Search Books</h1>
+        <form @submit.prevent="search_books" class="space-y-4 flex flex-col items-center">
+            <div class="w-full max-w-md">
+            <label for="search_title" class="block text-sm font-medium text-gray-700">Search Title:</label>
+            <input 
+                type="text" 
+                id="search_title" 
+                v-model="search_title" 
+                required 
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"/>
             </div>
-            <button type="submit">Search</button>
+            <button type="submit" 
+            class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-full shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            Search </button>
         </form>
 
-        <div v-if="search_results.length > 0 && search_results.length != 0">
-            <span>Search Results ( {{ search_results.length }} ) </span>
+        <div v-if="search_results.length > 0 && search_results.length != 0" class="mt-4 text-green-600 flex flex-col items-center">
+            <span>Search Results ( {{ search_results.length }} )</span>
         </div>
 
-        <div v-if="search_results.length == 0 && search_done">
-            <span> Not found </span>
+        <div v-if="search_results.length == 0 && search_done" class="mt-4 text-red-600 flex flex-col items-center">
+            <span>Not found</span>
         </div>
 
-        <div v-if="book_list.length > 0">
-            <h2>Book List</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            <button @click="sortTable('title')" style="background: none; border: none; cursor: pointer;">Title</button>
-                        </th>
-                        <th>
-                            Publisher
-                        </th>
-                        <th>
-                            <button @click="sortTable('author_name')" style="background: none; border: none; cursor: pointer;"> Author </button>
-                        </th>
-                        <th>
-                            <button @click="sortTable('status')" style="background: none; border: none; cursor: pointer;"> Status </button>
-                        </th>
-                        <th>
-                            Category
-                        </th>
-                        <th>Cover image</th>
-                        <th>
-                            Average Rating
-                        </th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="book in book_list" :key="book.id">
-                        <td>{{ book.title }}</td>
-                        <td>{{ book.publisher_name }}</td>
-                        <td>{{ book.author_name }}</td>
-                        <td>{{ book.status }}</td>
-                        <td>{{ book.category_name }}</td>
-                        <td> 
-                            <img :src="'/storage/' + book.cover_image" v-if="book.cover_image" alt="Cover Image" style="width: 50px; height: 50px;" />
-                        </td>
-                        <td>{{ book.average_rating }}</td>
-                        <td>
-                            <Link :href="'/books/' + book.id + '/show'">View</Link>
-                            <!-- Edit a book is the ID 2 -->
-                            <Link v-if="auth.user.permissions.original.includes(2)" :href="'/books/' + book.id + '/edit'">Edit</Link>
-                            <button @click="delete_book(book.id)">Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
+        <div v-if="book_list.length > 0" class="mt-6">
+            <h2 class="text-xl font-semibold mb-4">Book List</h2>
+            <table class="min-w-full border-collapse border border-gray-300">
+            <thead class="bg-gray-100">
+                <tr>
+                <th class="border border-gray-300 px-4 py-2 text-left">
+                    <button @click="sortTable('title')" class="text-blue-500 troy_web_color hover:underline">Title</button>
+                </th>
+                <th class="border border-gray-300 px-4 py-2 text-left troy_web_alt_color">Publisher</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">
+                    <button @click="sortTable('author_name')" class="text-blue-500 hover:underline troy_web_color">Author</button>
+                </th>
+                <th class="border border-gray-300 px-4 py-2 text-left">
+                    <button @click="sortTable('status')" class="text-blue-500 hover:underline troy_web_color">Status</button>
+                </th>
+                <th class="border border-gray-300 px-4 py-2 text-left troy_web_color">Category</th>
+                <th class="border border-gray-300 px-4 py-2 text-left troy_web_color">Cover Image</th>
+                <th class="border border-gray-300 px-4 py-2 text-left troy_web_color">Average Rating</th>
+                <th class="border border-gray-300 px-4 py-2 text-left troy_web_color">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="book in book_list" :key="book.id" class="hover:bg-orange-800">
+                <td class="border border-gray-300 px-4 py-2">{{ book.title }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ book.publisher_name }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ book.author_name }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ book.status }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ book.category_name }}</td>
+                <td class="border border-gray-300 px-4 py-2">
+                    <img :src="'/storage/' + book.cover_image" v-if="book.cover_image" alt="Cover Image" class="w-12 h-12 object-cover" />
+                </td>
+                <td class="border border-gray-300 px-4 py-2">{{ book.average_rating }}</td>
+                <td class="border border-gray-300 px-4 py-2 space-x-2">
+                    <Link :href="'/books/' + book.id + '/show'" class="text-blue-500 hover:underline">View</Link>
+                    <Link v-if="auth.user.permissions.original.includes(2)" :href="'/books/' + book.id + '/edit'" class="text-green-500 hover:underline">Edit</Link>
+                    <button @click="delete_book(book.id)" class="text-red-500 hover:underline">Delete</button>
+                </td>
+                </tr>
+            </tbody>
             </table>
         </div>
 
-        <div v-if="book_list.length > 0">
-            <h2>Books available</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            <button @click="sortTable('title')" style="background: none; border: none; cursor: pointer;">Title</button>
-                        </th>
-                        <th>
-                            Publisher
-                        </th>
-                        <th>
-                            <button @click="sortTable('author_name')" style="background: none; border: none; cursor: pointer;"> Author </button>
-                        </th>
-                        <th>
-                            <button @click="sortTable('status')" style="background: none; border: none; cursor: pointer;"> Status </button>
-                        </th>
-                        <th>
-                            Category
-                        </th>
-                        <th>Cover image</th>
-                        <th>
-                            Average Rating
-                        </th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="book in book_list" :key="book.id">
-                        <td>{{ book.title }}</td>
-                        <td>{{ book.publisher_name }}</td>
-                        <td>{{ book.author_name }}</td>
-                        <td>{{ book.status }}</td>
-                        <td>{{ book.category_name }}</td>
-                        <td> 
-                            <img :src="'/storage/' + book.cover_image" v-if="book.cover_image" alt="Cover Image" style="width: 50px; height: 50px;" />
-                        </td>
-                        <td>{{ book.average_rating }}</td>
-                        <td>
-                            <button @click="make_checkout_book( book.id )" v-if="auth.user.permissions.original.includes(4)"> Mark Checked out </button>
-                            <p v-if="!auth.user.permissions.original.includes(4)">Unavailable</p>
-                        </td>
-                    </tr>
-                </tbody>
+        <div v-if="book_list.length > 0" class="mt-6">
+            <h2 class="text-xl font-semibold mb-4 troy_web_color">Books Available</h2>
+            <table class="min-w-full border-collapse border border-gray-300">
+            <thead class="bg-gray-100">
+                <tr>
+                <th class="border border-gray-300 px-4 py-2 text-left">
+                    <p class="text-blue-500 troy_web_color hover:underline">Title</p>
+                </th>
+                <th class="border border-gray-300 px-4 py-2 text-left troy_web_color">Publisher</th>
+                <th class="border border-gray-300 px-4 py-2 text-left">
+                    <p class="text-blue-500 troy_web_color hover:underline">Author</p>
+                </th>
+                <th class="border border-gray-300 px-4 py-2 text-left">
+                    <p class="text-blue-500 troy_web_color hover:underline">Status</p>
+                </th>
+                <th class="border border-gray-300 px-4 py-2 text-left troy_web_color">Category</th>
+                <th class="border border-gray-300 px-4 py-2 text-left troy_web_color">Cover Image</th>
+                <th class="border border-gray-300 px-4 py-2 text-left troy_web_color">Average Rating</th>
+                <th class="border border-gray-300 px-4 py-2 text-left troy_web_color">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="book in props.books" :key="book.id" class="hover:bg-orange-800">
+                <td class="border border-gray-300 px-4 py-2">{{ book.title }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ book.publisher_name }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ book.author_name }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ book.status }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ book.category_name }}</td>
+                <td class="border border-gray-300 px-4 py-2">
+                    <img :src="'/storage/' + book.cover_image" v-if="book.cover_image" alt="Cover Image" class="w-12 h-12 object-cover" />
+                </td>
+                <td class="border border-gray-300 px-4 py-2">{{ book.average_rating }}</td>
+                <td class="border border-gray-300 px-4 py-2">
+                    <button @click="make_checkout_book(book.id)" v-if="auth.user.permissions.original.includes(4)" class="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Mark Checked Out</button>
+                    <p v-if="!auth.user.permissions.original.includes(4)" class="text-gray-500">Unavailable</p>
+                </td>
+                </tr>
+            </tbody>
             </table>
         </div>
 
-        <!-- add a new book is the ID 1 -->
-        <Link :href="`/books/create`" v-if="auth.user.permissions.original.includes(1)">Add a new book</Link>
+        <div class="mt-4">
+            <!-- add a new book is the ID 1 -->
+            <Link :href="'/books/create'" v-if="auth.user.permissions.original.includes(1)" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-full shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Add a new book</Link>
+        </div>
+
     </div>
 </template>
